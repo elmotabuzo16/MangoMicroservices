@@ -47,8 +47,7 @@ namespace Mango.Web.Controllers
             }
             else
             {
-                // This is added because from the view, we have asp-validation-summary=All
-                ModelState.AddModelError("CustomError", response.Message);
+                TempData["error"] = response.Message;
                 return View(loginRequestDto);
             }
         }
@@ -115,6 +114,9 @@ namespace Mango.Web.Controllers
 
 
             var principal = new ClaimsPrincipal(identity);
+
+            // This will define that the cookie is authenticated, and we can use [Authorize]
+            // As well as User.Identity.IsAuthenticated from _Layout.cshtml
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
     }
