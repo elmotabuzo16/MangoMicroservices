@@ -1,5 +1,6 @@
 using Mango.Web.Models;
 using Mango.Web.Service.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -8,18 +9,50 @@ namespace Mango.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
 
-        public HomeController(ILogger<HomeController> logger, IProductService productService)
+        public HomeController(IProductService productService)
         {
-            _logger = logger;
             _productService = productService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            var list = new List<ProductDto>();
+
+            var response = await _productService.GetAllProductsAsync();
+
+            if (response != null && response.IsSuccess)
+            {
+                list = JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+
+            return View(list);
+
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ProductDetails(int productId)
+        {
+            var model = new ProductDto();
+
+            var response = await _productService.GetProductByIdAsync(productId);
+
+            if (response != null && response.IsSuccess)
+            {
+                model = JsonConvert.DeserializeObject<ProductDto>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
+
+            return View(model);
+
         }
 
         public IActionResult Privacy()
