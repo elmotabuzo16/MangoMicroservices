@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 namespace Mango.Web.Controllers
 {
+    [Authorize]
     public class CouponController : Controller
     {
         private readonly ICouponService _couponService;
@@ -16,7 +17,7 @@ namespace Mango.Web.Controllers
             _couponService = couponService;
         }
 
-        [Authorize(Roles = "CUSTOMER")]
+        
         public async Task<IActionResult> CouponIndex()
         {
             var list = new List<CouponDto>();
