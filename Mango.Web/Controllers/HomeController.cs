@@ -19,20 +19,7 @@ namespace Mango.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var list = new List<ProductDto>();
-
-            var response = await _productService.GetAllProductsAsync();
-
-            if (response != null && response.IsSuccess)
-            {
-                list = JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(response.Result));
-            }
-            else
-            {
-                TempData["error"] = response?.Message;
-            }
-
-            return View(list);
+            return View();
         }
 
         public IActionResult Privacy()
