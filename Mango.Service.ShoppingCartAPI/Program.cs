@@ -1,3 +1,5 @@
+using Mango.Service.ShoppingCartAPI.Service;
+using Mango.Service.ShoppingCartAPI.Service.IService;
 using Mango.Services.ShoppingCartAPI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddHttpClient("Product", u => u.BaseAddress =
+    new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+builder.Services.AddScoped<IProductService, ProductService>();
+
 
 var secret = builder.Configuration.GetValue<string>("ApiSettings:JwtOptions:Secret");
 var issuer = builder.Configuration.GetValue<string>("ApiSettings:JwtOptions:Issuer");

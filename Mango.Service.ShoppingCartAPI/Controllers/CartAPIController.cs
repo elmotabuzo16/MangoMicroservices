@@ -2,6 +2,7 @@
 using Azure;
 using Mango.Service.ShoppingCartAPI.Models;
 using Mango.Service.ShoppingCartAPI.Models.Dtos;
+using Mango.Service.ShoppingCartAPI.Service.IService;
 using Mango.Services.ShoppingCartAPI.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,16 +17,18 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly AppDbContext _appDbContext;
+        private readonly IProductService _productService;
         private ResponseDto _responseDto;
 
-        public CartAPIController(IMapper mapper, AppDbContext appDbContext)
+        public CartAPIController(IMapper mapper, AppDbContext appDbContext, IProductService productService)
         {
             _mapper = mapper;
             _appDbContext = appDbContext;
+            _productService = productService;
             _responseDto = new ResponseDto();
         }
 
-        [HttpPost("GetCart/{userid}")]
+        [HttpPost("GetCart/{userId}")]
         public async Task<ResponseDto> GetCart(string userId)
         {
             try
@@ -36,11 +39,18 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
 
                 };
 
+                // Check the cart details
                 cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>
                     (_appDbContext.CartDetails.Where(x => x.CartHeaderId == cart.CartHeader.CartHeaderId));
 
+                // Getting all products
+                var productDto = await _productService.GetAllProducts();
+
                 foreach (var item in cart.CartDetails)
                 {
+                    // assigning item.product to product dto based on Id
+                    item.Product = productDto.FirstOrDefault(x => x.ProductId == item.ProductId);
+                    // gets the total price
                     cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
                 }
 
