@@ -26,7 +26,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
     new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+builder.Services.AddHttpClient("Coupon", u => u.BaseAddress =
+    new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 
 
 var secret = builder.Configuration.GetValue<string>("ApiSettings:JwtOptions:Secret");
