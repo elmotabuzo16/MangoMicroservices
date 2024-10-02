@@ -1,5 +1,6 @@
 using Mango.Service.ShoppingCartAPI.Service;
 using Mango.Service.ShoppingCartAPI.Service.IService;
+using Mango.Service.ShoppingCartAPI.Utility;
 using Mango.Services.ShoppingCartAPI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -50,12 +51,14 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
-    new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+    new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddHttpClient("Coupon", u => u.BaseAddress =
-    new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
+    new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 
 var secret = builder.Configuration.GetValue<string>("ApiSettings:JwtOptions:Secret");
 var issuer = builder.Configuration.GetValue<string>("ApiSettings:JwtOptions:Issuer");
