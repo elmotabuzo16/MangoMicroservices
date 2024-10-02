@@ -37,38 +37,43 @@ namespace Mango.Service.ShoppingCartAPI.Controllers
         {
             try
             {
-                CartDto cart = new CartDto()
+                var ifUserIdExists = await _appDbContext.CartHeaders.FirstOrDefaultAsync(x => x.UserId == userId);
+
+                if (ifUserIdExists != null)
                 {
-                    CartHeader = _mapper.Map<CartHeaderDto>(_appDbContext.CartHeaders.First(u => u.UserId == userId)),
-                };
-
-                // Check the cart details
-                cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>
-                    (_appDbContext.CartDetails.Where(x => x.CartHeaderId == cart.CartHeader.CartHeaderId));
-
-                // Getting all products
-                var productDto = await _productService.GetAllProducts();
-
-                foreach (var item in cart.CartDetails)
-                {
-                    // assigning item.product to product dto based on Id
-                    item.Product = productDto.FirstOrDefault(x => x.ProductId == item.ProductId);
-                    // gets the total price
-                    cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
-                }
-
-                // Apply coupon if any
-                 if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
-                {
-                    var coupon = await _couponService.GetCouponByCode(cart.CartHeader.CouponCode);
-                    if (coupon != null && cart.CartHeader.CartTotal > coupon.MinAmount)
+                    CartDto cart = new CartDto()
                     {
-                        cart.CartHeader.CartTotal -= coupon.DiscountAmount;
-                        cart.CartHeader.Discount = coupon.DiscountAmount;
-                    }
-                }
+                        CartHeader = _mapper.Map<CartHeaderDto>(_appDbContext.CartHeaders.First(u => u.UserId == userId)),
+                    };
 
-                _responseDto.Result = cart;
+                    // Check the cart details
+                    cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>
+                        (_appDbContext.CartDetails.Where(x => x.CartHeaderId == cart.CartHeader.CartHeaderId));
+
+                    // Getting all products
+                    var productDto = await _productService.GetAllProducts();
+
+                    foreach (var item in cart.CartDetails)
+                    {
+                        // assigning item.product to product dto based on Id
+                        item.Product = productDto.FirstOrDefault(x => x.ProductId == item.ProductId);
+                        // gets the total price
+                        cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
+                    }
+
+                    // Apply coupon if any
+                    if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
+                    {
+                        var coupon = await _couponService.GetCouponByCode(cart.CartHeader.CouponCode);
+                        if (coupon != null && cart.CartHeader.CartTotal > coupon.MinAmount)
+                        {
+                            cart.CartHeader.CartTotal -= coupon.DiscountAmount;
+                            cart.CartHeader.Discount = coupon.DiscountAmount;
+                        }
+                    }
+
+                    _responseDto.Result = cart;
+                }
             }
             catch (Exception ex)
             {

@@ -47,6 +47,18 @@ namespace Mango.Web.Service
             return result;
         }
 
+        public async Task<ResponseDto?> RemoveCouponAsync(CartDto cartDto)
+        {
+            var result = await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.POST,
+                ApiUrl = StaticDetails.ShoppingCartAPIBaseURL + "/api/cart/RemoveCoupon",
+                Data = cartDto
+            });
+
+            return result;
+        }
+
         public async Task<ResponseDto?> UpsertCartAsync(CartDto cartDto)
         {
             var result = await _baseService.SendAsync(new RequestDto()

@@ -54,6 +54,20 @@ namespace Mango.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> RemoveCoupon(CartDto cartDto)
+        {
+            var response = await _cartService.RemoveCouponAsync(cartDto);
+
+            if (response != null && response.IsSuccess)
+            {
+                TempData["success"] = "Cart updated successfully";
+                return RedirectToAction(nameof(CartIndex));
+            }
+
+            return View();
+        }
+
 
         private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()
         {
@@ -63,7 +77,7 @@ namespace Mango.Web.Controllers
 
             var response = await _cartService.GetCartByUserIdAsync(userId);
 
-            if (response != null && response.IsSuccess)
+            if (response.Result != null && response.IsSuccess)
             {
                 var cartDto = JsonConvert.DeserializeObject<CartDto>(response.Result.ToString());
                 return cartDto;
