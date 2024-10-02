@@ -26,6 +26,7 @@ namespace Mango.Web.Controllers
 
             if (response != null && response.IsSuccess) 
             {
+                // Deserializing because you want to see the values of the object from View
                 list = JsonConvert.DeserializeObject<List<CouponDto>>(Convert.ToString(response.Result));
             }
             else
@@ -71,7 +72,8 @@ namespace Mango.Web.Controllers
 
 			if (response != null && response.IsSuccess)
 			{
-				var model = JsonConvert.DeserializeObject<CouponDto>(Convert.ToString(response.Result));
+                // Deserializing because you want to see the values of the object from View
+                var model = JsonConvert.DeserializeObject<CouponDto>(Convert.ToString(response.Result));
 				return View(model);
 			}
 

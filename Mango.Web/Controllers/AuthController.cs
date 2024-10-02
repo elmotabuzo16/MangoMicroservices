@@ -36,6 +36,7 @@ namespace Mango.Web.Controllers
 
             if (response != null && response.IsSuccess)
             {
+                // Deserializing because you want to use the result to Signin User
                 var model = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response.Result));
 
                 await SignInUser(model);
