@@ -18,6 +18,7 @@ namespace Mango.Web.Controllers
         }
 
 		[HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ProductIndex()
         {
 			var list = new List<ProductDto>();

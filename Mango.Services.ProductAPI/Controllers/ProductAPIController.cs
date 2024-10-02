@@ -24,6 +24,7 @@ namespace Mango.Services.ProductAPI.Controllers
             _responseDto = new ResponseDto();
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             try
