@@ -14,5 +14,12 @@ namespace Mango.Service.ShoppingCartAPI.Models.Dtos
         public double Discount { get; set; }
         public double CartTotal { get; set; }
 
+        // For message bus
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
+
+
     }
 }
