@@ -97,6 +97,9 @@ namespace Mango.Services.EmailAPI.Messaging
         {
             await _emailCartProcessor.StopProcessingAsync();
             await _emailCartProcessor.DisposeAsync();
+
+            await _emailRegisterProcessor.StopProcessingAsync();
+            await _emailRegisterProcessor.DisposeAsync();
         }
     }
 }
