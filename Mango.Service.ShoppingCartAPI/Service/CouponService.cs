@@ -1,5 +1,5 @@
-﻿using Mango.Service.ShoppingCartAPI.Models.Dtos;
-using Mango.Service.ShoppingCartAPI.Service.IService;
+﻿using Mango.Service.ShoppingCartAPI.Service.IService;
+using Mango.Services.ShoppingCartAPI.Models.Dtos;
 using Newtonsoft.Json;
 
 namespace Mango.Service.ShoppingCartAPI.Service

@@ -10,10 +10,12 @@ namespace Mango.Web.Controllers
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
+        private readonly IOrderService _orderService;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, IOrderService orderService)
         {
             _cartService = cartService;
+            _orderService = orderService;
         }
 
         [HttpGet]
@@ -22,6 +24,8 @@ namespace Mango.Web.Controllers
         {
             return View(await LoadCartDtoBasedOnLoggedInUser());
         }
+
+        
 
         public async Task<IActionResult> Remove(int cartDetailsId)
         {
@@ -68,6 +72,12 @@ namespace Mango.Web.Controllers
             return View();
         }
 
+        [Authorize]
+        public async Task<IActionResult> Checkout()
+        {
+            return View(await LoadCartDtoBasedOnLoggedInUser());
+        }
+
         [HttpPost]
         public async Task<IActionResult> EmailCart(CartDto cartDto)
         {
@@ -81,6 +91,27 @@ namespace Mango.Web.Controllers
             {
                 TempData["success"] = "Email will be processed shortly";
                 return RedirectToAction(nameof(CartIndex));
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName("Checkout")]
+        public async Task<IActionResult> Checkout(CartDto cartDto)
+        {
+            var cart = await LoadCartDtoBasedOnLoggedInUser();
+            cart.CartHeader.FirstName = cartDto.CartHeader.FirstName;
+            cart.CartHeader.LastName = cartDto.CartHeader.LastName;
+            cart.CartHeader.Phone = cartDto.CartHeader.Phone;
+            cart.CartHeader.Email = cartDto.CartHeader.Email;
+
+            var response = await _orderService.CreateOrder(cart);
+
+            var orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+
+            if (response != null && response.IsSuccess)
+            {
             }
 
             return View();
@@ -103,5 +134,6 @@ namespace Mango.Web.Controllers
 
             return new CartDto();
         }
+
     }
 }

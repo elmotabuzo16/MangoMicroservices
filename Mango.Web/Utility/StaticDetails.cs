@@ -6,6 +6,7 @@
         public static string AuthAPIBaseURL { get; set; }
         public static string ProductAPIBaseURL { get; set; }
         public static string ShoppingCartAPIBaseURL { get; set; }
+        public static string OrderAPIBaseURL { get; set; }
 
         public const string TokenCookie = "JwtToken";
         public enum ApiType

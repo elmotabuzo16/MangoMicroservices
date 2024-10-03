@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Mango.Service.ShoppingCartAPI.Models;
-using Mango.Service.ShoppingCartAPI.Models.Dtos;
+using Mango.Services.ShoppingCartAPI.Models;
+using Mango.Services.ShoppingCartAPI.Models.Dtos;
 
 namespace Mango.Services.ShoppingCartAPI.MappingProfile
 {

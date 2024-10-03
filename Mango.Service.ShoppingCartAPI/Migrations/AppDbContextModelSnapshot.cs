@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Mango.Service.ShoppingCartAPI.Migrations
+namespace Mango.Services.ShoppingCartAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -21,7 +21,7 @@ namespace Mango.Service.ShoppingCartAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Mango.Service.ShoppingCartAPI.Models.CartDetails", b =>
+            modelBuilder.Entity("Mango.Services.ShoppingCartAPI.Models.CartDetails", b =>
                 {
                     b.Property<int>("CartDetailsId")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace Mango.Service.ShoppingCartAPI.Migrations
                     b.ToTable("CartDetails");
                 });
 
-            modelBuilder.Entity("Mango.Service.ShoppingCartAPI.Models.CartHeader", b =>
+            modelBuilder.Entity("Mango.Services.ShoppingCartAPI.Models.CartHeader", b =>
                 {
                     b.Property<int>("CartHeaderId")
                         .ValueGeneratedOnAdd()
@@ -64,9 +64,9 @@ namespace Mango.Service.ShoppingCartAPI.Migrations
                     b.ToTable("CartHeaders");
                 });
 
-            modelBuilder.Entity("Mango.Service.ShoppingCartAPI.Models.CartDetails", b =>
+            modelBuilder.Entity("Mango.Services.ShoppingCartAPI.Models.CartDetails", b =>
                 {
-                    b.HasOne("Mango.Service.ShoppingCartAPI.Models.CartHeader", "CartHeader")
+                    b.HasOne("Mango.Services.ShoppingCartAPI.Models.CartHeader", "CartHeader")
                         .WithMany()
                         .HasForeignKey("CartHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)

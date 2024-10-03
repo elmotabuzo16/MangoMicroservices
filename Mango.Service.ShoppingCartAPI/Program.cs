@@ -1,13 +1,15 @@
 using Mango.MessageBus;
-using Mango.Service.ShoppingCartAPI.Service;
-using Mango.Service.ShoppingCartAPI.Service.IService;
-using Mango.Service.ShoppingCartAPI.Utility;
+using Mango.Services.ShoppingCartAPI.Service;
+using Mango.Services.ShoppingCartAPI.Service.IService;
+using Mango.Services.ShoppingCartAPI.Utility;
 using Mango.Services.ShoppingCartAPI.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Mango.Service.ShoppingCartAPI.Service.IService;
+using Mango.Service.ShoppingCartAPI.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 

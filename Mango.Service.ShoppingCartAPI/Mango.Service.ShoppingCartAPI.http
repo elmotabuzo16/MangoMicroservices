@@ -1,6 +1,6 @@
-@Mango.Service.ShoppingCartAPI_HostAddress = http://localhost:7001
+@Mango.Services.ShoppingCartAPI_HostAddress = http://localhost:7001
 
-GET {{Mango.Service.ShoppingCartAPI_HostAddress}}/api/coupon/GetByCode/10OFF
+GET {{Mango.Services.ShoppingCartAPI_HostAddress}}/api/coupon/GetByCode/10OFF
 
 
 ###
