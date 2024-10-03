@@ -25,8 +25,6 @@ namespace Mango.Web.Controllers
             return View(await LoadCartDtoBasedOnLoggedInUser());
         }
 
-        
-
         public async Task<IActionResult> Remove(int cartDetailsId)
         {
             // Get the user id from logged in user
@@ -116,6 +114,14 @@ namespace Mango.Web.Controllers
 
             return View();
         }
+
+        [Authorize]
+        public async Task<IActionResult> Confirmation(int orderId)
+        {
+            return View(orderId);
+        }
+
+
 
 
         private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()
