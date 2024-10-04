@@ -1,7 +1,7 @@
-using Mango.Services.EmailAPI.Data;
-using Mango.Services.EmailAPI.Extensions;
-using Mango.Services.EmailAPI.Messaging;
-using Mango.Services.EmailAPI.Services;
+using Mango.Services.RewardsAPI.Data;
+using Mango.Services.RewardsAPI.Extensions;
+using Mango.Services.RewardsAPI.Messaging;
+using Mango.Services.RewardsAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +22,7 @@ builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>
 
 var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
 optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
+builder.Services.AddSingleton(new RewardsService(optionBuilder.Options));
 
 var app = builder.Build();
 
