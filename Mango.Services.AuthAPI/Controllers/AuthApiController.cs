@@ -1,5 +1,6 @@
 ﻿using Mango.MessageBus;
 using Mango.Services.AuthAPI.Models.Dto;
+using Mango.Services.AuthAPI.RabbmitMQSender;
 using Mango.Services.AuthAPI.Services.IService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,15 +11,15 @@ namespace Mango.Services.AuthAPI.Controllers
     public class AuthApiController : Controller
     {
         private readonly IAuthService _authService;
-        private readonly IMessageBus _messageBus;
         private readonly IConfiguration _configuration;
+        private readonly IRabbmitMQAuthMessageSender _rabbmitMQAuthMessageSender;
         private readonly ResponseDto _responseDto;
 
-        public AuthApiController(IAuthService authService, IMessageBus messageBus, IConfiguration configuration)
+        public AuthApiController(IAuthService authService, IConfiguration configuration, IRabbmitMQAuthMessageSender rabbmitMQAuthMessageSender)
         {
             _authService = authService;
-            _messageBus = messageBus;
             _configuration = configuration;
+            _rabbmitMQAuthMessageSender = rabbmitMQAuthMessageSender;
             _responseDto = new();
         }
 
@@ -34,7 +35,7 @@ namespace Mango.Services.AuthAPI.Controllers
                 return BadRequest(_responseDto);
             }
 
-            await _messageBus.PublishMessage(registrationRequestDto.Email, _configuration.GetValue<string>("TopicAndQueueNames:EmailRegisterQueue"));
+            _rabbmitMQAuthMessageSender.SendMessage(registrationRequestDto.Email, _configuration.GetValue<string>("TopicAndQueueNames:EmailRegisterQueue"));
 
             return Ok(_responseDto);
         }
