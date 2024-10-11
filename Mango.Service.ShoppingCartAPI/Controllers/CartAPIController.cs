@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.PortableExecutable;
 using Mango.Service.ShoppingCartAPI.Service.IService;
+using Mango.Services.ShoppingCartAPI.RabbmitMQSender;
 
 namespace Mango.Services.ShoppingCartAPI.Controllers
 {
@@ -23,18 +24,18 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         private readonly AppDbContext _appDbContext;
         private readonly IProductService _productService;
         private readonly ICouponService _couponService;
-        private readonly IMessageBus _messageBus;
         private readonly IConfiguration _configuration;
+        private readonly IRabbmitMQAuthMessageSender _rabbmitMQAuthMessageSender;
         private ResponseDto _responseDto;
 
-        public CartAPIController(IMapper mapper, AppDbContext appDbContext, IProductService productService, ICouponService couponService, IMessageBus messageBus, IConfiguration configuration)
+        public CartAPIController(IMapper mapper, AppDbContext appDbContext, IProductService productService, ICouponService couponService, IConfiguration configuration, IRabbmitMQAuthMessageSender rabbmitMQAuthMessageSender)
         {
             _mapper = mapper;
             _appDbContext = appDbContext;
             _productService = productService;
             _couponService = couponService;
-            _messageBus = messageBus;
             _configuration = configuration;
+            _rabbmitMQAuthMessageSender = rabbmitMQAuthMessageSender;
             _responseDto = new ResponseDto();
         }
 
@@ -228,7 +229,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         {
             try
             {
-                await _messageBus.PublishMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue"));   
+                _rabbmitMQAuthMessageSender.SendMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue"));   
 
                 _responseDto.Result = true;
             }

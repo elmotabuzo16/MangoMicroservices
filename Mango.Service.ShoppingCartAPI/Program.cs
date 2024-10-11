@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Mango.Service.ShoppingCartAPI.Service.IService;
 using Mango.Service.ShoppingCartAPI.Service;
+using Mango.Services.ShoppingCartAPI.RabbmitMQSender;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +53,8 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
+builder.Services.AddScoped<IRabbmitMQAuthMessageSender, RabbmitMQAuthMessageSender>();
 
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
     new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();

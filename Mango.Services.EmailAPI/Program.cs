@@ -20,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddHostedService<RabbitMQAuthConsumer>();
+builder.Services.AddHostedService<RabbitMQCartConsumer>();
 builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 
 var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
