@@ -3,6 +3,7 @@ using Mango.Services.EmailAPI.Extensions;
 using Mango.Services.EmailAPI.Messaging;
 using Mango.Services.EmailAPI.Services;
 using Mango.Services.EmailConsumer.RabbitMQAuthConsumer;
+using Mango.Services.EmailConsumer.RabbitMQAuthConsumer.Fanout;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddHostedService<RabbitMQAuthConsumer>();
 builder.Services.AddHostedService<RabbitMQCartConsumer>();
+builder.Services.AddHostedService<OrderConsumer>();
 builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 
 var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();

@@ -2,6 +2,7 @@ using Mango.Services.RewardsAPI.Data;
 using Mango.Services.RewardsAPI.Extensions;
 using Mango.Services.RewardsAPI.Messaging;
 using Mango.Services.RewardsAPI.Services;
+using Mango.Services.RewardsConsumer.Messaging.Fanout;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHostedService<RewardsConsumer>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

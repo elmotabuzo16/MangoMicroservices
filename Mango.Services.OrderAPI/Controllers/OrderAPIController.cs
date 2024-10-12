@@ -6,6 +6,7 @@ using Mango.Services.OrderAPI.Models;
 using Mango.Services.OrderAPI.Models.Dtos;
 using Mango.Services.OrderAPI.Models.OrderDto;
 using Mango.Services.OrderAPI.Models.RewardsDto;
+using Mango.Services.OrderAPI.RabbmitMQSender;
 using Mango.Services.OrderAPI.Utility;
 using Mango.Services.ShoppingCartAPI.Service.IService;
 using Microsoft.AspNetCore.Authorization;
@@ -21,11 +22,11 @@ namespace Mango.Services.OrderAPI.Controllers
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IProductService _productService;
-        private readonly IMessageBus _messageBus;
+        private readonly IRabbmitMQOrderMessageSender _messageBus;
         private readonly IConfiguration _configuration;
         private ResponseDto _responseDto;
 
-        public OrderAPIController(AppDbContext dbContext, IMapper mapper, IProductService productService, IMessageBus messageBus, IConfiguration configuration)
+        public OrderAPIController(AppDbContext dbContext, IMapper mapper, IProductService productService, IRabbmitMQOrderMessageSender messageBus, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -60,7 +61,7 @@ namespace Mango.Services.OrderAPI.Controllers
                 };
 
                 string topicName = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
-                await _messageBus.PublishMessage(rewardsDto, topicName);
+                _messageBus.SendMessage(rewardsDto, topicName);
 
                 return Ok(_responseDto);
 
